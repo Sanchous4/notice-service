@@ -1,4 +1,4 @@
-package com.example.notice_service
+package com.example.noticeservice
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
@@ -6,8 +6,9 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest
 class NoticeServiceApplicationTests {
 
-	@Test
-	fun contextLoads() {
-	}
+    @Test
+    @Suppress("EmptyFunctionBlock")
+    fun contextLoads() {
+    }
 
 }

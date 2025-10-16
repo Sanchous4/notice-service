@@ -1,3 +1,4 @@
+import dev.detekt.gradle.Detekt
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -27,35 +28,32 @@ dependencyManagement {
     }
 }
 
-val vertxVersion = "4.5.14"
-val hibernateReactiveVersion = "1.1.9.Final"
-val mutinyReactorVersion = "2.8.0"
 val csv = "1.11.0"
 
 dependencies {
-    // Flyway (official starter) and JDBC for migrations
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
     implementation("org.flywaydb:flyway-core")
     implementation("org.flywaydb:flyway-database-postgresql")
     implementation("org.postgresql:postgresql")
-    implementation("org.apache.commons:commons-csv:$csv")
 
-    // Hibernate
-    implementation("io.vertx:vertx-pg-client:$vertxVersion")                       // Vert.x reactive driver :contentReference[oaicite:0]{index=0}
-    implementation("org.hibernate.reactive:hibernate-reactive-core-jakarta:$hibernateReactiveVersion") // Hibernate Reactive core :contentReference[oaicite:1]{index=1}
-    implementation("io.smallrye.reactive:mutiny-reactor:$mutinyReactorVersion")     // Reactor↔Mutiny bridge :contentReference[oaicite:2]{index=2}
-    kapt("org.hibernate:hibernate-jpamodelgen:6.2.7.Final") // JPA metamodel generator :contentReference[oaicite:3]{index=3}
+    implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
+    implementation("org.postgresql:r2dbc-postgresql")
 
-    // Webflux
     implementation("org.springframework.boot:spring-boot-starter-webflux")
+    runtimeOnly("ch.qos.logback:logback-classic")
 
-    // Other libraries
+    // Third-party libs
+    implementation("org.apache.commons:commons-csv:1.11.0")
+    implementation("org.hibernate.reactive:hibernate-reactive-core-jakarta:1.1.9.Final")
+    implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
+
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
@@ -74,6 +72,20 @@ kotlin {
         )
         jvmTarget.set(JvmTarget.JVM_21)
     }
+}
+
+
+tasks.withType<Detekt>().configureEach {
+    reports {
+        html.required.set(true)
+        sarif.required.set(false)
+        xml.required.set(false)
+    }
+}
+
+detekt {
+    buildUponDefaultConfig = true
+    config.setFrom(files("$rootDir/config/detekt/detekt.yml"))
 }
 
 tasks.withType<Test> { useJUnitPlatform() }

@@ -1,4 +1,4 @@
-package com.example.notice_service
+package com.example.noticeservice
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
