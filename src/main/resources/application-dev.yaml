@@ -1,0 +1,8 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+MANAGEMENT_ENDPOINTS_INCLUDE: "*"
+OPENAPI_DOCS_ENABLED: true
+SWAGGER_UI_ENABLED: true

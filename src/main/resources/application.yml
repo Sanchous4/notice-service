@@ -1,7 +1,21 @@
+management:
+  endpoints:
+    web:
+      # Default (prod-safe). Can be overridden by env var or profile files.
+      exposure:
+        include: ${MANAGEMENT_ENDPOINTS_INCLUDE:health}
+
+springdoc:
+  api-docs:
+    # OFF by default (prod-safe). Can be overridden below or by env.
+    enabled: ${OPENAPI_DOCS_ENABLED:false}
+  swagger-ui:
+    enabled: ${SWAGGER_UI_ENABLED:false}
+
 spring:
   devtools:
     restart:
-      enabled: false
+      enabled: true
   autoconfigure:
     exclude:
       - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
@@ -10,6 +24,9 @@ spring:
 
   application:
     name: notice-service
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:unknown}
+
   r2dbc:
     url: r2dbc:postgresql://localhost:6543/notice-db
     username: user

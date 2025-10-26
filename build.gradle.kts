@@ -25,6 +25,7 @@ repositories {
 dependencyManagement {
     imports {
         mavenBom("org.springframework.boot:spring-boot-dependencies:3.4.4")
+        mavenBom("org.springdoc:springdoc-openapi:2.6.0")
     }
 }
 
@@ -35,6 +36,8 @@ dependencies {
     implementation("org.flywaydb:flyway-core")
     implementation("org.flywaydb:flyway-database-postgresql")
     implementation("org.postgresql:postgresql")
+
+    implementation("org.springdoc:springdoc-openapi-starter-webflux-ui")
 
     implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
     implementation("org.postgresql:r2dbc-postgresql")

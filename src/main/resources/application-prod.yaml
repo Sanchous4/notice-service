@@ -1,0 +1,8 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+MANAGEMENT_ENDPOINTS_INCLUDE: health
+OPENAPI_DOCS_ENABLED: false
+SWAGGER_UI_ENABLED: false
