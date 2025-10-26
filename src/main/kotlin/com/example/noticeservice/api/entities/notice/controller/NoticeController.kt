@@ -1,6 +1,7 @@
 package com.example.noticeservice.api.entities.notice.controller
 
-import com.example.noticeservice.api.entities.notice.entity.NoticeEntity
+import com.example.noticeservice.api.entities.notice.dto.response.NoticeResponse
+import com.example.noticeservice.api.entities.notice.service.NoticeService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
@@ -11,10 +12,10 @@ const val NOTICE_PATH = "/api/{version}/notice"
 
 @RestController
 @RequestMapping(NOTICE_PATH)
-class NoticeController : NoticeControllerSwaggerDoc {
+class NoticeController(private val noticeService: NoticeService) : NoticeControllerSwaggerDoc {
 
     @GetMapping
-    override fun getAllNotices(@PathVariable version: NoticeApiVersion): Flux<NoticeEntity> {
-        return Flux.empty()
+    override fun getAllNotices(@PathVariable version: NoticeApiVersion): Flux<NoticeResponse> {
+        return noticeService.getAll()
     }
 }

@@ -1,7 +1,6 @@
 package com.example.noticeservice.api.entities.notice.controller
 
 import com.example.noticeservice.api.entities.notice.dto.response.NoticeResponse
-import com.example.noticeservice.api.entities.notice.entity.NoticeEntity
 import com.example.noticeservice.api.shared.annotations.GeneralSwaggerDoc
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -46,5 +45,5 @@ interface NoticeControllerSwaggerDoc {
             schema = Schema(implementation = NoticeApiVersion::class)
         )
         @PathVariable version: NoticeApiVersion
-    ): Flux<NoticeEntity>
+    ): Flux<NoticeResponse>
 }

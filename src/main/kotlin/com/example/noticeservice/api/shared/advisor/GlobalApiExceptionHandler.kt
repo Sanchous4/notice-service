@@ -3,6 +3,7 @@ package com.example.noticeservice.api.shared.advisor
 import com.example.noticeservice.api.shared.exceptions.ApiBaseException
 import com.example.noticeservice.api.shared.response.ApiErrorResponse
 import com.fasterxml.jackson.databind.ObjectMapper
+import mu.KotlinLogging
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.annotation.Order
@@ -16,6 +17,8 @@ import reactor.core.publisher.Mono
 class GlobalReactiveErrorHandler(
     private val objectMapper: ObjectMapper
 ) : ErrorWebExceptionHandler {
+
+    private val logger = KotlinLogging.logger {}
 
     private fun findRootCause(exception: Throwable): Throwable {
         var depth = 0
@@ -31,6 +34,7 @@ class GlobalReactiveErrorHandler(
             cause.httpStatus to cause.toApiResponse()
         } else {
             val status = HttpStatus.INTERNAL_SERVER_ERROR
+
             status to ApiErrorResponse.of(
                 status,
                 message = cause.message ?: "Unknown server error",
@@ -40,6 +44,8 @@ class GlobalReactiveErrorHandler(
     }
 
     override fun handle(exchange: ServerWebExchange, exception: Throwable): Mono<Void> {
+        logger.error { exception.message }
+
         val response = exchange.response
         if (response.isCommitted) return Mono.error(exception)
         response.headers.contentType = MediaType.APPLICATION_JSON

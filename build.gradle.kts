@@ -2,13 +2,14 @@ import dev.detekt.gradle.Detekt
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    kotlin("jvm") version "1.9.25"
-    kotlin("plugin.spring") version "1.9.25"
-    kotlin("kapt") version "2.2.10"
+    kotlin("jvm") version "2.2.10"
+    kotlin("plugin.spring") version "2.2.10"
     id("org.springframework.boot") version "3.4.4"
     id("io.spring.dependency-management") version "1.1.7"
     id("dev.detekt") version ("2.0.0-alpha.0")
     id("org.jetbrains.kotlinx.kover") version "0.8.3"
+
+    id("com.google.devtools.ksp") version "2.2.10-2.0.2"
 }
 
 group = "com.example"
@@ -38,6 +39,7 @@ dependencies {
     implementation("org.postgresql:postgresql")
 
     implementation("org.springdoc:springdoc-openapi-starter-webflux-ui")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
 
     implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
     implementation("org.postgresql:r2dbc-postgresql")
@@ -46,6 +48,10 @@ dependencies {
     runtimeOnly("ch.qos.logback:logback-classic")
 
     // Third-party libs
+    implementation("io.github.s0nicyouth:processor_annotations:1.3.0")
+    implementation("io.github.s0nicyouth:converters:1.3.0")
+    ksp("io.github.s0nicyouth:processor:1.3.0")
+
     implementation("org.apache.commons:commons-csv:1.11.0")
     implementation("org.hibernate.reactive:hibernate-reactive-core-jakarta:1.1.9.Final")
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
@@ -68,6 +74,9 @@ dependencies {
 }
 
 kotlin {
+    sourceSets.main {
+        kotlin.srcDir("build/generated/ksp/main/kotlin")
+    }
     compilerOptions {
         freeCompilerArgs.addAll(
             "-Xjsr305=strict",
@@ -76,6 +85,7 @@ kotlin {
         jvmTarget.set(JvmTarget.JVM_21)
     }
 }
+
 
 
 tasks.withType<Detekt>().configureEach {

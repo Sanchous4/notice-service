@@ -1,27 +1,24 @@
 package com.example.noticeservice.api.entities.notice.entity
 
-import jakarta.persistence.*
-import org.hibernate.annotations.CreationTimestamp
+import org.springframework.data.annotation.CreatedDate
+import org.springframework.data.annotation.Id
+import org.springframework.data.relational.core.mapping.Column
+import org.springframework.data.relational.core.mapping.Table
 import java.time.LocalDateTime
 
-@Entity
-@Table(name = "notice")
+@Table("notice")
 data class NoticeEntity(
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
-    @Column(name = "title", nullable = false)
-    val title: String = "",
+    @Column("title")
+    val title: String,
 
-    @Column(name = "content", nullable = false)
-    val content: String = "",
+    @Column("content")
+    val content: String,
 
-    @CreationTimestamp
-    @Column(
-        name = "created_at",
-        columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP",
-        updatable = false
-    )
+    @CreatedDate
+    @Column("created_at")
     val createdAt: LocalDateTime? = null
 )
