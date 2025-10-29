@@ -1,21 +1,36 @@
 package com.example.noticeservice.api.entities.notice.controller
 
+import com.example.noticeservice.api.entities.notice.controller.NoticePaths.MAIN
+import com.example.noticeservice.api.entities.notice.dto.request.NoticePageRequest
 import com.example.noticeservice.api.entities.notice.dto.response.NoticeResponse
-import com.example.noticeservice.api.entities.notice.service.NoticeService
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import com.example.noticeservice.api.entities.notice.service.NoticeReadService
+import com.example.noticeservice.shared.dto.response.page.PageResponse
+import jakarta.validation.Valid
+import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 
-const val NOTICE_PATH = "/api/{version}/notice"
+object NoticePaths {
+    const val MAIN = "/api/{version}/notice"
+    const val GET_ALL = "/all"
+}
 
 @RestController
-@RequestMapping(NOTICE_PATH)
-class NoticeController(private val noticeService: NoticeService) : NoticeControllerSwaggerDoc {
+@RequestMapping(MAIN)
+@Validated
+class NoticeController(private val noticeReadService: NoticeReadService) : NoticeControllerSwaggerDoc {
+
+    @GetMapping(NoticePaths.GET_ALL)
+    override fun getAll(@PathVariable version: NoticeApiVersion): Flux<NoticeResponse> {
+        return noticeReadService.getAll()
+    }
 
     @GetMapping
-    override fun getAllNotices(@PathVariable version: NoticeApiVersion): Flux<NoticeResponse> {
-        return noticeService.getAll()
+    override fun getByPageRequest(
+        @PathVariable version: NoticeApiVersion,
+        @Valid @ModelAttribute pageRequest: NoticePageRequest
+    ): Mono<PageResponse<NoticeResponse>> {
+        return noticeReadService.getByPageRequest(pageRequest)
     }
 }

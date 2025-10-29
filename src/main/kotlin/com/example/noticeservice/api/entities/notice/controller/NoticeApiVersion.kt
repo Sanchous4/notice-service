@@ -1,6 +1,6 @@
 package com.example.noticeservice.api.entities.notice.controller
 
-import com.example.noticeservice.api.shared.exceptions.InvalidApiVersionException
+import com.example.noticeservice.api.shared.exception.InvalidApiVersionException
 import io.swagger.v3.oas.annotations.media.Schema
 
 
@@ -17,7 +17,7 @@ enum class NoticeApiVersion(
     companion object {
         fun fromValue(value: String): NoticeApiVersion {
             val nullableValue = entries.firstOrNull { it.value.equals(value, ignoreCase = true) }
-            return nullableValue ?: throw InvalidApiVersionException(value, NOTICE_PATH)
+            return nullableValue ?: throw InvalidApiVersionException(value, NoticePaths.MAIN)
         }
     }
 

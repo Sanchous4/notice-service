@@ -1,7 +1,7 @@
-package com.example.noticeservice.api.shared.exceptions
+package com.example.noticeservice.api.shared.exception
 
 import com.example.noticeservice.api.shared.response.ApiErrorResponse
-import com.example.noticeservice.shared.exceptions.BaseSingleLineException
+import com.example.noticeservice.shared.exception.BaseSingleLineException
 import org.springframework.http.HttpStatus
 
 /**

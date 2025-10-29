@@ -1,6 +1,6 @@
-package com.example.noticeservice.api.shared.advisor
+package com.example.noticeservice.api.shared.handler
 
-import com.example.noticeservice.api.shared.exceptions.ApiBaseException
+import com.example.noticeservice.api.shared.exception.ApiBaseException
 import com.example.noticeservice.api.shared.response.ApiErrorResponse
 import com.fasterxml.jackson.databind.ObjectMapper
 import mu.KotlinLogging

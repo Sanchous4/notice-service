@@ -1,8 +1,8 @@
 package com.example.noticeservice.shared.config.profile
 
 import com.example.noticeservice.shared.enum.ProfileEnum
-import com.example.noticeservice.shared.exceptions.IllegalStateExceptionSingleLine
-import com.example.noticeservice.shared.helpers.EnumHelper
+import com.example.noticeservice.shared.exception.IllegalStateExceptionSingleLine
+import com.example.noticeservice.shared.helper.EnumHelper
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
 import org.springframework.context.annotation.Configuration

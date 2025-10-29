@@ -1,4 +1,4 @@
-package com.example.noticeservice.shared.exceptions
+package com.example.noticeservice.shared.exception
 
 import mu.KotlinLogging
 

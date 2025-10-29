@@ -1,4 +1,4 @@
-package com.example.noticeservice.api.shared.annotations
+package com.example.noticeservice.api.shared.annotation
 
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.responses.ApiResponse

@@ -1,4 +1,4 @@
-package com.example.noticeservice.api.shared.exceptions
+package com.example.noticeservice.api.shared.exception
 
 import org.springframework.http.HttpStatus
 
