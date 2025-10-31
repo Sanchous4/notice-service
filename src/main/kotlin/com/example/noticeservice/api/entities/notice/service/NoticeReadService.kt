@@ -4,7 +4,7 @@ import com.example.noticeservice.api.entities.notice.dto.request.NoticePageReque
 import com.example.noticeservice.api.entities.notice.dto.response.NoticeResponse
 import com.example.noticeservice.api.entities.notice.mapper.NoticeMapper
 import com.example.noticeservice.api.entities.notice.repository.NoticeRepository
-import com.example.noticeservice.api.shared.validator.ResponseValidator
+import com.example.noticeservice.api.shared.validator.PayloadValidator
 import com.example.noticeservice.shared.dto.response.page.PageResponse
 import com.example.noticeservice.shared.mapper.PageMapper
 import jakarta.validation.Validator
@@ -21,12 +21,12 @@ class NoticeReadService(
     validator: Validator,
 ) {
 
-    private val responseValidator = ResponseValidator(validator, NoticeReadService::class.toString())
+    private val payloadValidator = PayloadValidator(validator, NoticeReadService::class.simpleName)
 
     fun getAll(): Flux<NoticeResponse> {
         return repository.findAll()
             .map { mapper.convertToResponse(it) }
-            .doOnNext { responseValidator.validate(it) }
+            .doOnNext { payloadValidator.validateResponse(it) }
     }
 
     fun getByPageRequest(pageRequest: NoticePageRequest): Mono<PageResponse<NoticeResponse>> {
@@ -34,7 +34,7 @@ class NoticeReadService(
 
         val mappedData = repository.findAllBy(pageable)
             .map { mapper.convertToResponse(it) }
-            .doOnNext { responseValidator.validate(it) }
+            .doOnNext { payloadValidator.validateResponse(it) }
             .collectList()
 
         val totalEntities = repository.count()
@@ -46,7 +46,7 @@ class NoticeReadService(
             .map { (content, total) ->
                 PageMapper.mapPageData(pageData = PageImpl(content, pageable, total))
             }
-            .doOnNext { responseValidator.validate(it) }
+            .doOnNext { payloadValidator.validateResponse(it) }
     }
 
 }

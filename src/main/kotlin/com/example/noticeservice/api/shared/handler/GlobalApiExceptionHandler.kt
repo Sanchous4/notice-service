@@ -30,15 +30,17 @@ class GlobalReactiveErrorHandler(
     }
 
     private fun buildError(exchange: ServerWebExchange, cause: Throwable): Pair<HttpStatus, ApiErrorResponse> {
+        val defaultPath = exchange.request.path.value()
+
         return if (cause is ApiBaseException) {
-            cause.httpStatus to cause.toApiResponse()
+            cause.httpStatus to cause.toApiResponse(defaultPath)
         } else {
             val status = HttpStatus.INTERNAL_SERVER_ERROR
 
             status to ApiErrorResponse.of(
                 status,
                 message = cause.message ?: "Unknown server error",
-                path = exchange.request.path.value()
+                path = defaultPath
             )
         }
     }

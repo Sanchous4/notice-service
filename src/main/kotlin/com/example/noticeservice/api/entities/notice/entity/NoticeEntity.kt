@@ -16,7 +16,7 @@ data class NoticeEntity(
     val title: String,
 
     @Column("content")
-    val content: String,
+    val content: String?,
 
     @CreatedDate
     @Column("created_at")

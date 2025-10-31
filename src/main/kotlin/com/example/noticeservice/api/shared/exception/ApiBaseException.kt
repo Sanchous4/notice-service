@@ -16,14 +16,14 @@ import org.springframework.http.HttpStatus
 open class ApiBaseException(
     message: String,
     val httpStatus: HttpStatus,
-    val path: String
+    val path: String? = null
 ) : BaseSingleLineException(message) {
 
-    fun toApiResponse(): ApiErrorResponse {
+    fun toApiResponse(defaultPath: String? = null): ApiErrorResponse {
         return ApiErrorResponse.of(
             httpStatus,
             message,
-            path
+            path ?: defaultPath
         )
     }
 }
