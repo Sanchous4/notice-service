@@ -5,11 +5,11 @@ import com.example.noticeservice.api.shared.exception.ValidationApiResponseExcep
 import jakarta.validation.ConstraintViolation
 import jakarta.validation.Validator
 
-
-class PayloadValidator(private val validator: Validator, private val serviceName: String?) {
-    fun <T> validateSilently(response: T): Set<ConstraintViolation<T>> {
-        return validator.validate<T>(response)
-    }
+class PayloadValidator(
+    private val validator: Validator,
+    private val serviceName: String?,
+) {
+    fun <T> validateSilently(response: T): Set<ConstraintViolation<T>> = validator.validate<T>(response)
 
     fun <T> validateResponse(response: T) {
         val violations = validateSilently(response)

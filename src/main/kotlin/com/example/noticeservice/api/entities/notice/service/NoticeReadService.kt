@@ -23,30 +23,30 @@ class NoticeReadService(
 
     private val payloadValidator = PayloadValidator(validator, NoticeReadService::class.simpleName)
 
-    fun getAll(): Flux<NoticeResponse> {
-        return repository.findAll()
+    fun getAll(): Flux<NoticeResponse> =
+        repository
+            .findAll()
             .map { mapper.convertToResponse(it) }
             .doOnNext { payloadValidator.validateResponse(it) }
-    }
 
     fun getByPageRequest(pageRequest: NoticePageRequest): Mono<PageResponse<NoticeResponse>> {
         val pageable = PageRequest.of(pageRequest.page, pageRequest.size)
 
-        val mappedData = repository.findAllBy(pageable)
-            .map { mapper.convertToResponse(it) }
-            .doOnNext { payloadValidator.validateResponse(it) }
-            .collectList()
+        val mappedData =
+            repository
+                .findAllBy(pageable)
+                .map { mapper.convertToResponse(it) }
+                .doOnNext { payloadValidator.validateResponse(it) }
+                .collectList()
 
         val totalEntities = repository.count()
 
-        return Mono.zip(mappedData, totalEntities)
+        return Mono
+            .zip(mappedData, totalEntities)
             .map { tuple ->
                 NoticePageData(tuple.t1, tuple.t2)
-            }
-            .map { (content, total) ->
+            }.map { (content, total) ->
                 PageMapper.mapPageData(pageData = PageImpl(content, pageable, total))
-            }
-            .doOnNext { payloadValidator.validateResponse(it) }
+            }.doOnNext { payloadValidator.validateResponse(it) }
     }
-
 }

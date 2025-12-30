@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Configuration
  */
 @Configuration
 class FlywayConfig {
-
     /**
      * Creates and configures a [Flyway] instance.
      *
@@ -20,7 +19,8 @@ class FlywayConfig {
      */
     @Bean
     fun flyway(): Flyway =
-        Flyway.configure()
+        Flyway
+            .configure()
             .baselineVersion("0")
             .dataSource("jdbc:postgresql://localhost:6543/notice-db", "user", "pass")
             .locations("classpath:db/migration")
@@ -39,6 +39,4 @@ class FlywayConfig {
         f.repair()
         return FlywayMigrationInitializer(f)
     }
-
-
 }

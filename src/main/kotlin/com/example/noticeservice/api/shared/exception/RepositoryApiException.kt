@@ -7,8 +7,7 @@ open class RepositoryApiException(
     repository: KClass<*>,
     message: String,
     httpStatus: HttpStatus,
-) :
-    ApiBaseException(
+) : ApiBaseException(
         "Error occurred in repository: ${repository.simpleName}, message: $message",
-        httpStatus
+        httpStatus,
     )

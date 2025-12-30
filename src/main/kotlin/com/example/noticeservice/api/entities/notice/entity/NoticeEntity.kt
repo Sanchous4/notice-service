@@ -8,17 +8,13 @@ import java.time.LocalDateTime
 
 @Table("notice")
 data class NoticeEntity(
-
     @Id
     val id: Long? = null,
-
     @Column("title")
     val title: String,
-
     @Column("content")
     val content: String?,
-
     @CreatedDate
     @Column("created_at")
-    val createdAt: LocalDateTime? = null
+    val createdAt: LocalDateTime? = null,
 )

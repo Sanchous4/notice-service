@@ -8,13 +8,11 @@ import java.sql.SQLException
  * Helper functions for database migrations.
  */
 object MigrationHelpers {
-
     /**
      * Holds SQL query builders used in migration helpers.
      */
     private object QUERIES {
-        fun countRows(tableName: String): String =
-            "SELECT COUNT(*) FROM $tableName"
+        fun countRows(tableName: String): String = "SELECT COUNT(*) FROM $tableName"
     }
 
     /**
@@ -27,7 +25,10 @@ object MigrationHelpers {
      */
     @Suppress("SqlSourceToSinkFlow")
     @Throws(SQLException::class)
-    fun isEmptyTable(connection: Connection, tableName: String): Boolean {
+    fun isEmptyTable(
+        connection: Connection,
+        tableName: String,
+    ): Boolean {
         val query = QUERIES.countRows(tableName)
 
         connection.createStatement().use { stmt ->
@@ -45,7 +46,8 @@ object MigrationHelpers {
      * @return a CSV format with headers, trimming, and empty line handling
      */
     fun getDefaultCSVFormat(): CSVFormat =
-        CSVFormat.DEFAULT.builder()
+        CSVFormat.DEFAULT
+            .builder()
             .setHeader()
             .setSkipHeaderRecord(true)
             .setTrim(true)

@@ -11,5 +11,5 @@ data class PageResponse<T>(
     override val totalPages: Int,
     override val isLast: Boolean,
     override val hasNext: Boolean,
-    override val hasPrevious: Boolean
+    override val hasPrevious: Boolean,
 ) : IPageResponse<T>

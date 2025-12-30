@@ -1,7 +1,7 @@
 package com.example.noticeservice.api.entities.notice.repository
 
 import com.example.noticeservice.api.entities.notice.entity.NoticeEntity
-import com.example.noticeservice.api.shared.exception.RepositoryExtraFieldsApiException
+import com.example.noticeservice.api.shared.repository.GenericPatchRepository
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.r2dbc.core.DatabaseClient
 import org.springframework.stereotype.Repository
@@ -16,67 +16,23 @@ val columnTypes = mapOf(
 
 val allowedFields = setOf("title", "content")
 
+const val tableName = "notice"
+
 @Repository
 class NoticeDBClientRepository(
-    private val databaseClient: DatabaseClient,
-    private val objectMapper: ObjectMapper // inject from Spring’s context
+    databaseClient: DatabaseClient,
+    objectMapper: ObjectMapper // inject from Spring’s context
 ) {
 
-    fun updateNoticeById(id: Long, fields: Map<String, Any?>): Mono<NoticeEntity> {
-        if (fields.isEmpty()) return Mono.empty()
+    private val genericPatchRepository = GenericPatchRepository<NoticeEntity>(
+        databaseClient,
+        objectMapper,
+        tableName,
+        columnTypes
+    )
 
-        val primitiveFields = fields.filterValues { isNotMapValue(it) }.filterKeys { it != "id" }
-        if (primitiveFields.isEmpty()) return Mono.empty()
-
-        val extraFields = primitiveFields
-            .filterKeys { it !in allowedFields } // collect only disallowed keys
-            .toMap()
-
-        if (!extraFields.isEmpty()) return Mono.error(
-            RepositoryExtraFieldsApiException(
-                NoticeDBClientRepository::class,
-                extraFields,
-                allowedFields
-            )
-        )
-
-        val setClause = primitiveFields.keys.joinToString(", ") { "$it = :$it" }
-        val sql = "UPDATE notice SET $setClause WHERE id = :id RETURNING *"
-
-        var spec = databaseClient.sql(sql).bind("id", id)
-        primitiveFields.forEach { (key, value) ->
-            spec = bindValue(spec, key, value)
-        }
-
-        return spec.map { row, meta ->
-            val columnMap = mutableMapOf<String, Any?>()
-            meta.columnMetadatas.forEach { col ->
-                val name = col.name
-                val type = columnTypes[name] ?: Any::class.java
-                columnMap[name] = row.get(name, type)
-            }
-
-            objectMapper.convertValue(columnMap, NoticeEntity::class.java)
-        }.one()
+    fun updateNoticeById(id: Long, notice: Map<String, Any?>): Mono<NoticeEntity> {
+        return genericPatchRepository.patchById(id, notice, NoticeEntity::class.java, allowedFields)
     }
-
-    private fun bindValue(
-        spec: DatabaseClient.GenericExecuteSpec,
-        key: String,
-        value: Any?
-    ): DatabaseClient.GenericExecuteSpec {
-        val columnType = columnTypes.get(key)
-
-        if (columnType == null) return spec
-
-        return when (value) {
-            null -> spec.bindNull(key, columnType)
-            is Collection<*> -> spec.bind(key, value.toTypedArray())
-            else -> spec.bind(key, value)
-        }
-    }
-
-    private fun isNotMapValue(value: Any?): Boolean =
-        value !is Map<*, *>
 }
 

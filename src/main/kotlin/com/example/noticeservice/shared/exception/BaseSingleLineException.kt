@@ -16,14 +16,11 @@ private val log = KotlinLogging.logger {}
 open class BaseSingleLineException(
     message: String,
 ) : RuntimeException(message, null) {
-
     init {
         log.error { toMessage() }
     }
 
-    fun toMessage(): String {
-        return "${this::class.simpleName}: $message"
-    }
+    fun toMessage(): String = "${this::class.simpleName}: $message"
 
     /**
      * Suppress stack trace creation to keep logs clean and avoid performance costs.

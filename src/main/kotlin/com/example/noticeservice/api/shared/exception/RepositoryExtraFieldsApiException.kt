@@ -8,19 +8,23 @@ open class RepositoryExtraFieldsApiException(
     extraFields: Map<String, Any?>,
     allowedFields: Set<String>,
 ) : RepositoryApiException(
-    repository,
-    buildMessage(extraFields, allowedFields),
-    HttpStatus.BAD_REQUEST
-) {
+        repository,
+        buildMessage(extraFields, allowedFields),
+        HttpStatus.BAD_REQUEST,
+    ) {
     companion object {
-        fun buildMessage(fields: Map<String, Any?>, allowed: Set<String>): String {
+        fun buildMessage(
+            fields: Map<String, Any?>,
+            allowed: Set<String>,
+        ): String {
             if (fields.isEmpty()) {
                 return "Request contains no extra fields."
             }
 
-            val extras = fields.entries.joinToString(", ") { (key, value) ->
-                "'$key' = ${value?.toString() ?: "null"}"
-            }
+            val extras =
+                fields.entries.joinToString(", ") { (key, value) ->
+                    "'$key' = ${value?.toString() ?: "null"}"
+                }
 
             val allowedList = allowed.joinToString(", ") { "'$it'" }
 

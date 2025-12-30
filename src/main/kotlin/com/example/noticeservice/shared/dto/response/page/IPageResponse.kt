@@ -10,7 +10,6 @@ import jakarta.validation.constraints.NotNull
  */
 @Schema(description = "Generic interface defining pagination metadata and items container.")
 interface IPageResponse<T> {
-
     @get:NotNull
     @get:Schema(description = "List of items contained in the current page.", required = true)
     val items: List<T>
@@ -39,7 +38,7 @@ interface IPageResponse<T> {
     @get:Schema(
         description = "True if another page follows this one; false if this is the final page.",
         example = "true",
-        required = true
+        required = true,
     )
     val hasNext: Boolean
 
@@ -47,8 +46,7 @@ interface IPageResponse<T> {
     @get:Schema(
         description = "True if a page exists before the current one; false if this is the first page.",
         example = "false",
-        required = true
+        required = true,
     )
     val hasPrevious: Boolean
 }
-

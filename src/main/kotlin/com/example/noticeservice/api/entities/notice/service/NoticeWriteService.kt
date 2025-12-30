@@ -14,9 +14,8 @@ import reactor.core.publisher.Mono
 class NoticeWriteService(
     validator: Validator,
     private val noticeDBClientRepository: NoticeDBClientRepository,
-    private val noticeMapper: NoticeMapper
+    private val noticeMapper: NoticeMapper,
 ) {
-
     private val payloadValidator = PayloadValidator(validator, NoticeWriteService::class.simpleName)
 
     fun update(request: NoticePatchRequest): Mono<NoticeResponse> {
@@ -24,7 +23,8 @@ class NoticeWriteService(
 
         if (request.id == null) throw ServiceIdNullApiException(NoticeWriteService::class)
 
-        return noticeDBClientRepository.updateNoticeById(request.id, request.presentFields)
+        return noticeDBClientRepository
+            .updateNoticeById(request.id, request.presentFields)
             .map { noticeMapper.convertToResponse(it) }
             .doOnNext { payloadValidator.validateResponse(it) }
     }

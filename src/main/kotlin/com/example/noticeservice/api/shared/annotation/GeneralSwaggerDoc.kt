@@ -13,8 +13,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
     content = [
         Content(
             mediaType = "application/json",
-            schema = Schema(implementation = ApiErrorResponse::class)
-        )
-    ]
+            schema = Schema(implementation = ApiErrorResponse::class),
+        ),
+    ],
 )
-annotation class GeneralSwaggerDoc()
+annotation class GeneralSwaggerDoc

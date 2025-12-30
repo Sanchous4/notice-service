@@ -10,4 +10,3 @@ import reactor.core.publisher.Flux
 interface NoticeRepository : ReactiveCrudRepository<NoticeEntity, Long> {
     fun findAllBy(pageable: Pageable): Flux<NoticeEntity>
 }
-

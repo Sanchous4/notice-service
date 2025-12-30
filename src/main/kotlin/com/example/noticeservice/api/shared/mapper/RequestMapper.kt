@@ -7,9 +7,12 @@ import org.springframework.stereotype.Component
 
 @Component
 class RequestMapper(
-    private val objectMapper: ObjectMapper
+    private val objectMapper: ObjectMapper,
 ) {
-    fun <T> mapToDto(cleaned: Map<String, Any?>, targetClass: Class<T>): T
+    fun <T> mapToDto(
+        cleaned: Map<String, Any?>,
+        targetClass: Class<T>,
+    ): T
             where T : RequestFieldsMetadata {
         val dto = objectMapper.convertValue(cleaned, targetClass)
         dto.presentFields.putAll(cleaned)

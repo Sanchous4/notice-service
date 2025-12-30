@@ -6,32 +6,31 @@ import java.time.OffsetDateTime
 
 @Schema(description = "Standard structure for API error responses")
 data class ApiErrorResponse(
-
     @field:Schema(description = "HTTP status code", example = "500")
     val httpStatus: Int,
-
     @field:Schema(description = "Short description of the error", example = "Server error")
     val error: String,
-
     @field:Schema(
         description = "Detailed error message for debugging or client feedback",
         example = "Validation of response failed, details: id should not be null",
     )
     val message: String? = null,
-
     @field:Schema(description = "Timestamp when the error occurred", example = "2025-10-26T15:32:09Z")
     val timestamp: OffsetDateTime = OffsetDateTime.now(),
-
     @field:Schema(description = "Path of the request that caused the error", example = "/api/v1/notice")
-    val path: String? = null
+    val path: String? = null,
 ) {
     companion object {
-        fun of(status: HttpStatus, message: String?, path: String? = null): ApiErrorResponse =
+        fun of(
+            status: HttpStatus,
+            message: String?,
+            path: String? = null,
+        ): ApiErrorResponse =
             ApiErrorResponse(
                 httpStatus = status.value(),
                 error = status.reasonPhrase,
                 message = message,
-                path = path
+                path = path,
             )
     }
 }

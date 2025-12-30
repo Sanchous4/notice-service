@@ -9,14 +9,17 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.core.env.Environment
 
 @Configuration
-class StartupProfileGuard(private val env: Environment) : ApplicationRunner {
+class StartupProfileGuard(
+    private val env: Environment,
+) : ApplicationRunner {
     override fun run(args: ApplicationArguments?) {
         val activeProfile = env.getProperty("spring.profiles.active")?.trim()
         val profile = ProfileEnum.getEnumByValue(activeProfile)
 
         if (profile.isUnknown()) {
             val supportedValues = EnumHelper.getAllNamesAsString<ProfileEnum>()
-            val message = "❌ Invalid configuration: profile '$activeProfile' is not allowed to start application.\n" +
+            val message =
+                "❌ Invalid configuration: profile '$activeProfile' is not allowed to start application.\n" +
                     "Supported values are: [$supportedValues]."
             throw IllegalStateExceptionSingleLine(message)
         }
@@ -24,4 +27,3 @@ class StartupProfileGuard(private val env: Environment) : ApplicationRunner {
         println("✅ Profile: $profile used in application.yaml")
     }
 }
-

@@ -12,6 +12,6 @@ import io.swagger.v3.oas.annotations.media.Schema
     description = "API version — determines which contract or schema is used.",
     required = true,
     example = NoticeApiVersion.Constants.V1,
-    schema = Schema(implementation = NoticeApiVersion::class)
+    schema = Schema(implementation = NoticeApiVersion::class),
 )
-annotation class ApiVersionNoticePath()
+annotation class ApiVersionNoticePath
